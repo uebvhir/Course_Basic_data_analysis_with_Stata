@@ -1,0 +1,173 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  H:\_copia_disc\E\Docencia\stata\hematologia\\resultados_ses1.txt
+  log type:  text
+ opened on:  16 Nov 2012, 12:18:26
+
+. 
+. *  3.- Importa la tabla de EXCEL “base_ferritina_usal” (el nombre de la tabla es el mismo que  la hoja
+. odbc load , dsn("Excel Files;DBQ= $DDIR\base_ferritina_usal.xls") table("base_ferritina_usal$") clear lower  datestring
+
+. 
+. 
+. * 4.- Describe y mira las variables de la tabla
+. describe
+
+Contains data
+  obs:           145                          
+ vars:            29                          
+ size:       141,665 (99.9% of memory free)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              storage  display     value
+variable name   type   format      label      variable label
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ferritina_pre   double %10.0g                 FERRITINA_PRE
+nhc             double %10.0g                 NHC
+centro          double %10.0g                 CENTRO
+nhc_corta       double %10.0g                 NHC_CORTA
+iniciales       str244 %244s                  INICIALES
+upn             double %10.0g                 UPN
+tph_date        str19  %19s                   TPH_DATE
+transferrina_~e double %10.0g                 TRANSFERRINA_PRE
+transfe_sat_pre double %10.0g                 TRANSFE_SAT_PRE
+sideremia_pre   double %10.0g                 SIDEREMIA_PRE
+tbic_pre        double %10.0g                 TBIC_PRE
+pcr_pre         double %10.0g                 PCR_PRE
+vsg_pre         double %10.0g                 VSG_PRE
+quelacion_pre   double %10.0g                 QUELACION_PRE
+quela_farmaco~e str244 %244s                  QUELA_FARMACO_PRE
+quela_post      double %10.0g                 QUELA_POST
+quela_farmaco~t str244 %244s                  QUELA_FARMACO_POST
+fer_max_tph     double %10.0g                 FER_MAX_TPH
+fer_max_tph_d~e str19  %19s                   FER_MAX_TPH_Date
+transferrina_~h double %10.0g                 TRANSFERRINA_TPH
+transfe_sat_tph double %10.0g                 TRANSFE_SAT_TPH
+sideremia_tph   double %10.0g                 SIDEREMIA_TPH
+tbic_tph        double %10.0g                 TBIC_TPH
+pcr_tph         double %10.0g                 PCR_TPH
+vsg_tph         double %10.0g                 VSG_TPH
+motivo_exitus1  double %10.0g                 
+motivo_exitus2  double %10.0g                 
+motivo_exitus3  double %10.0g                 
+exitus_date     str19  %19s                   EXITUS_Date
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by:  
+     Note:  dataset has changed since last saved
+
+. browse
+
+. 
+. * 5.- Elimina las variable carácter
+. drop iniciales quela_farmaco_post
+
+. 
+. 
+. 
+. * 6. Genera las variables de fecha 
+. gen data_tph= mdy(real( substr(tph_date,6,2)) ,real(substr(tph_date, 9,2)),real(substr(tph_date,1,4)))
+
+. format %td data_tph
+
+. 
+. gen data_fer_max_tph= mdy(real( substr(fer_max_tph_date,6,2)) ,real(substr(fer_max_tph_date, 9,2)),real(substr(fer_max_tph_date,1,4)))
+(12 missing values generated)
+
+. format %td data_fer_max_tph
+
+. 
+. gen data_exitus= mdy(real( substr( exitus_date,6,2)) ,real(substr( exitus_date, 9,2)),real(substr( exitus_date,1,4)))
+(85 missing values generated)
+
+. format %td data_exitus
+
+. 
+. * 7.- Genera una variable que indique si el paciente ha muerto o no. Etiqueta la variable y los valores  vivo y muerto
+. 
+. gen mort=0
+
+. replace mort=1 if exitus_date!=""
+(60 real changes made)
+
+. 
+. label var mort"Esta muerto"
+
+. label define lab_mort 0"Vivo" 1"Muerto", modify
+
+. label val mort lab_mort
+
+. 
+. * 8.- Genera una variable que indique los años de seguimento. Etiqueta la variable.(Nota para los vivos considera el fin del seguimiento el 31/12/2009)
+. gen tseg=  (data_exitus-data_tph)/365
+(85 missing values generated)
+
+. replace tseg=  (mdy(12,31,2009)-  data_tph)/365 if tseg==.
+(85 real changes made)
+
+. label var tseg "Tiempo de seguimiento"
+
+. 
+. * 9.- Recodifica la variable tiempo de seguimiento en  0-2 años, 2-6 años y mas de 6.
+. 
+. recode tseg  min/2=1 2/6=2 6/max=3, gen(r_tseg1)
+(145 differences between tseg and r_tseg1)
+
+. label var r_tseg1 "Tiempo seguimiento recodificado"
+
+. label define lab_tseg 1"menos de 2" 2"2 a 6" 3"Mas de 6", modify
+
+. label val r_tseg1 lab_tseg
+
+. 
+. egen r_tseg2= cut(tseg), at (0,2,6,100) label
+
+.  
+.  * 10.- Guarda un fichero para los vivos  Guarda un fichero para los muertos
+.  
+. preserve
+
+. 
+. keep if mort==0
+(60 observations deleted)
+
+. 
+. save "$DDIR\vivos.dta", replace
+file H:\_copia_disc\E\Docencia\stata\hematologia\\vivos.dta saved
+
+. 
+. restore
+
+. preserve
+
+. keep if mort==1
+(85 observations deleted)
+
+. save "$DDIR\muertos.dta", replace
+file H:\_copia_disc\E\Docencia\stata\hematologia\\muertos.dta saved
+
+. 
+. restore
+
+. 
+. use  "$DDIR\vivos.dta", clear
+
+. 
+. 
+. 
+. * 11 Abre el fichero para los vivos y añádele el de los muertos y guardalo
+. 
+. append using  "$DDIR\muertos.dta"
+(label lab_mort already defined)
+(label lab_tseg already defined)
+(label r_tsega already defined)
+
+. 
+. save "$DIR\sesion1.dta", replace
+file \sesion1.dta saved
+
+. * 12 . Cierra el fichero de resultados  y la sesion
+. log close
+      name:  <unnamed>
+       log:  H:\_copia_disc\E\Docencia\stata\hematologia\\resultados_ses1.txt
+  log type:  text
+ closed on:  16 Nov 2012, 12:18:26
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------

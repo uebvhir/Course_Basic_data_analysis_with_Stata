@@ -1,0 +1,421 @@
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  H:\_copia_disc\E\Docencia\stata\hematologia\\resultados_ses3.txt
+  log type:  text
+ opened on:  16 Nov 2012, 14:29:14
+
+. use "$DIR\sesion1.dta", replace
+
+. 
+. 
+. 
+. * 2.- Existe diferencia en el nivel inicical de trasferrrina entre los vivos y los muertos?. 
+. 
+. * Dibuja el gràfico de densidades comparando
+. 
+. 
+. twoway kdensity transferrina_pre if mort==0 || kdensity transferrina_pre if mort==1 ||,legend(label( 1 Vivos) label(2 Muertos))
+
+. 
+. * Verifica la normalidad de la variable  en cada grupo
+. 
+. by mort,sort: swill trasnferrina_pre
+unrecognized command:  swill
+r(199);
+
+end of do-file
+
+r(199);
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. by mort,sort: swilk trasnferrina_pre
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Vivo
+variable trasnferrina_pre not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. by mort,sort: swilk  transferrina_pre
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Vivo
+
+                   Shapiro-Wilk W test for normal data
+
+    Variable |    Obs       W           V         z       Prob>z
+-------------+--------------------------------------------------
+transferri~e |     40    0.90667      3.689     2.747    0.00301
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Muerto
+
+                   Shapiro-Wilk W test for normal data
+
+    Variable |    Obs       W           V         z       Prob>z
+-------------+--------------------------------------------------
+transferri~e |     39    0.97610      0.927    -0.160    0.56367
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. sdtest trasnferrina_pre, by(mort)
+variable trasnferrina_pre not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. 
+. sdtest transferrina_pre, by(mort)
+
+Variance ratio test
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    Vivo |      40     207.575    7.287669    46.09126    192.8343    222.3157
+  Muerto |      39    184.8462    7.093414    44.29835    170.4863     199.206
+---------+--------------------------------------------------------------------
+combined |      79    196.3544    5.215606    46.35732     185.971    206.7379
+------------------------------------------------------------------------------
+    ratio = sd(Vivo) / sd(Muerto)                                 f =   1.0826
+Ho: ratio = 1                                    degrees of freedom =   39, 38
+
+    Ha: ratio < 1               Ha: ratio != 1                 Ha: ratio > 1
+  Pr(F < f) = 0.5960         2*Pr(F > f) = 0.8079           Pr(F > f) = 0.4040
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. ttest transferrina_pre, by(mort)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    Vivo |      40     207.575    7.287669    46.09126    192.8343    222.3157
+  Muerto |      39    184.8462    7.093414    44.29835    170.4863     199.206
+---------+--------------------------------------------------------------------
+combined |      79    196.3544    5.215606    46.35732     185.971    206.7379
+---------+--------------------------------------------------------------------
+    diff |            22.72885    10.17506                2.467712    42.98998
+------------------------------------------------------------------------------
+    diff = mean(Vivo) - mean(Muerto)                              t =   2.2338
+Ho: diff = 0                                     degrees of freedom =       77
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.9858         Pr(|T| > |t|) = 0.0284          Pr(T > t) = 0.0142
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. ranksum transferrina_pre, by(mort)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+        mort |      obs    rank sum    expected
+-------------+---------------------------------
+        Vivo |       40        1813        1600
+      Muerto |       39        1347        1560
+-------------+---------------------------------
+    combined |       79        3160        3160
+
+unadjusted variance    10400.00
+adjustment for ties       -3.29
+                     ----------
+adjusted variance      10396.71
+
+Ho: tr~a_pre(mort==Vivo) = tr~a_pre(mort==Muerto)
+             z =   2.089
+    Prob > |z| =   0.0367
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. twoway kdensity transferrina_tph if mort==0 || kdensity transferrina_tph if mort==1 ||,legend(label( 1 Vivos) label(2 Muertos))
+
+. by mort,sort: swilk  transferrina_tph
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Vivo
+
+                   Shapiro-Wilk W test for normal data
+
+    Variable |    Obs       W           V         z       Prob>z
+-------------+--------------------------------------------------
+transferri~h |     81    0.98700      0.901    -0.228    0.59026
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Muerto
+
+                   Shapiro-Wilk W test for normal data
+
+    Variable |    Obs       W           V         z       Prob>z
+-------------+--------------------------------------------------
+transferri~h |     44    0.93533      2.752     2.142    0.01608
+
+. sdtest transferrina_tph, by(mort)
+
+Variance ratio test
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    Vivo |      81     211.221    6.212717    55.91445    198.8573    223.5847
+  Muerto |      44    174.5159    8.026429    53.24131    158.3291    190.7027
+---------+--------------------------------------------------------------------
+combined |     125    198.3008    5.145725    57.53096     188.116    208.4856
+------------------------------------------------------------------------------
+    ratio = sd(Vivo) / sd(Muerto)                                 f =   1.1029
+Ho: ratio = 1                                    degrees of freedom =   80, 43
+
+    Ha: ratio < 1               Ha: ratio != 1                 Ha: ratio > 1
+  Pr(F < f) = 0.6316         2*Pr(F > f) = 0.7368           Pr(F > f) = 0.3684
+
+. ttest transferrina_tph, by(mort)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    Vivo |      81     211.221    6.212717    55.91445    198.8573    223.5847
+  Muerto |      44    174.5159    8.026429    53.24131    158.3291    190.7027
+---------+--------------------------------------------------------------------
+combined |     125    198.3008    5.145725    57.53096     188.116    208.4856
+---------+--------------------------------------------------------------------
+    diff |            36.70508    10.29929                16.31828    57.09188
+------------------------------------------------------------------------------
+    diff = mean(Vivo) - mean(Muerto)                              t =   3.5638
+Ho: diff = 0                                     degrees of freedom =      123
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.9997         Pr(|T| > |t|) = 0.0005          Pr(T > t) = 0.0003
+
+. ranksum transferrina_tph, by(mort)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+        mort |      obs    rank sum    expected
+-------------+---------------------------------
+        Vivo |       81      5866.5        5103
+      Muerto |       44      2008.5        2772
+-------------+---------------------------------
+    combined |      125        7875        7875
+
+unadjusted variance    37422.00
+adjustment for ties       -3.79
+                     ----------
+adjusted variance      37418.21
+
+Ho: tr~a_tph(mort==Vivo) = tr~a_tph(mort==Muerto)
+             z =   3.947
+    Prob > |z| =   0.0001
+
+. 
+. twoway kdensity  fer_max_tph if mort==0 || kdensity  fer_max_tph if mort==1 ||,legend(label( 1 Vivos) label(2 Muertos))
+
+. by mort,sort: swilk   fer_max_tph
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Vivo
+
+                   Shapiro-Wilk W test for normal data
+
+    Variable |    Obs       W           V         z       Prob>z
+-------------+--------------------------------------------------
+ fer_max_tph |     85    0.73042     19.450     6.525    0.00000
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> mort = Muerto
+
+                   Shapiro-Wilk W test for normal data
+
+    Variable |    Obs       W           V         z       Prob>z
+-------------+--------------------------------------------------
+ fer_max_tph |     60    0.86169      7.518     4.348    0.00001
+
+. sdtest  fer_max_tph, by(mort)
+
+Variance ratio test
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    Vivo |      85    1891.188    234.2982    2160.123    1425.261    2357.116
+  Muerto |      60    2300.328    306.0945    2370.997    1687.835    2912.822
+---------+--------------------------------------------------------------------
+combined |     145    2060.488    186.9188      2250.8    1691.029    2429.947
+------------------------------------------------------------------------------
+    ratio = sd(Vivo) / sd(Muerto)                                 f =   0.8300
+Ho: ratio = 1                                    degrees of freedom =   84, 59
+
+    Ha: ratio < 1               Ha: ratio != 1                 Ha: ratio > 1
+  Pr(F < f) = 0.2146         2*Pr(F < f) = 0.4293           Pr(F > f) = 0.7854
+
+. ttest  fer_max_tph, by(mort)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    Vivo |      85    1891.188    234.2982    2160.123    1425.261    2357.116
+  Muerto |      60    2300.328    306.0945    2370.997    1687.835    2912.822
+---------+--------------------------------------------------------------------
+combined |     145    2060.488    186.9188      2250.8    1691.029    2429.947
+---------+--------------------------------------------------------------------
+    diff |           -409.1401    379.3058               -1158.911    340.6307
+------------------------------------------------------------------------------
+    diff = mean(Vivo) - mean(Muerto)                              t =  -1.0787
+Ho: diff = 0                                     degrees of freedom =      143
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.1413         Pr(|T| > |t|) = 0.2826          Pr(T > t) = 0.8587
+
+. ranksum  fer_max_tph, by(mort)
+
+Two-sample Wilcoxon rank-sum (Mann-Whitney) test
+
+        mort |      obs    rank sum    expected
+-------------+---------------------------------
+        Vivo |       85      6092.5        6205
+      Muerto |       60      4492.5        4380
+-------------+---------------------------------
+    combined |      145       10585       10585
+
+unadjusted variance    62050.00
+adjustment for ties      -35.29
+                     ----------
+adjusted variance      62014.71
+
+Ho: fer_ma~h(mort==Vivo) = fer_ma~h(mort==Muerto)
+             z =  -0.452
+    Prob > |z| =   0.6514
+
+. 
+end of do-file
+
+. help kdensity
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. ttest  transferrina_pre= transferrina_tph
+
+Paired t test
+------------------------------------------------------------------------------
+Variable |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+tr~a_pre |      66    200.2576     5.72364    46.49907    188.8267    211.6885
+tr~a_tph |      66    202.1212    7.537521    61.23511    187.0677    217.1747
+---------+--------------------------------------------------------------------
+    diff |      66   -1.863636    6.890312    55.97716   -15.62454    11.89727
+------------------------------------------------------------------------------
+     mean(diff) = mean(transferrina_pre - transferrina_tph)       t =  -0.2705
+ Ho: mean(diff) = 0                              degrees of freedom =       65
+
+ Ha: mean(diff) < 0           Ha: mean(diff) != 0           Ha: mean(diff) > 0
+ Pr(T < t) = 0.3938         Pr(|T| > |t|) = 0.7877          Pr(T > t) = 0.6062
+
+. signtest  transferrina_pre= transferrina_tph
+
+Sign test
+
+        sign |    observed    expected
+-------------+------------------------
+    positive |          28        32.5
+    negative |          37        32.5
+        zero |           1           1
+-------------+------------------------
+         all |          66          66
+
+One-sided tests:
+  Ho: median of transfer~e - transferrina_tph = 0 vs.
+  Ha: median of transfer~e - transferrina_tph > 0
+      Pr(#positive >= 28) =
+         Binomial(n = 65, x >= 28, p = 0.5) =  0.8927
+
+  Ho: median of transfer~e - transferrina_tph = 0 vs.
+  Ha: median of transfer~e - transferrina_tph < 0
+      Pr(#negative >= 37) =
+         Binomial(n = 65, x >= 37, p = 0.5) =  0.1605
+
+Two-sided test:
+  Ho: median of transfer~e - transferrina_tph = 0 vs.
+  Ha: median of transfer~e - transferrina_tph != 0
+      Pr(#positive >= 37 or #negative >= 37) =
+         min(1, 2*Binomial(n = 65, x >= 37, p = 0.5)) =  0.3211
+
+. signrank  transferrina_pre= transferrina_tph
+
+Wilcoxon signed-rank test
+
+        sign |      obs   sum ranks    expected
+-------------+---------------------------------
+    positive |       28        1002        1105
+    negative |       37        1208        1105
+        zero |        1           1           1
+-------------+---------------------------------
+         all |       66        2211        2211
+
+unadjusted variance    24505.25
+adjustment for ties       -2.75
+adjustment for zeros      -0.25
+                     ----------
+adjusted variance      24502.25
+
+Ho: transferrina_pre = transferrina_tph
+             z =  -0.658
+    Prob > |z| =   0.5105
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. twoway sc transferrina_pre  transferrina_tph ||lfit  transferrina_pre  transferrina_tph
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. twoway sc transferrina_tph  transferrina_pre ||lfit  transferrina_pre  transferrina_tph  || lowess transferrina_pre  transferrina_tph
+
+. 
+end of do-file
+
+. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+
+. regress transferrina_tph  transferrina_pre
+
+      Source |       SS       df       MS              Number of obs =      66
+-------------+------------------------------           F(  1,    64) =   19.99
+       Model |  58019.3754     1  58019.3754           Prob > F      =  0.0000
+    Residual |  185713.655    64  2901.77586           R-squared     =  0.2380
+-------------+------------------------------           Adj R-squared =  0.2261
+       Total |   243733.03    65  3749.73893           Root MSE      =  53.868
+
+------------------------------------------------------------------------------
+transferri~h |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+transferri~e |   .6425184   .1436915     4.47   0.000     .3554617    .9295751
+       _cons |   73.45203   29.52938     2.49   0.015      14.4603    132.4438
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
