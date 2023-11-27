@@ -1,10 +1,10 @@
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  H:\_copia_disc\E\Docencia\stata\hematologia\\resultados_ses2.txt
+       log:  e:\18949893d\Nuevo Equipo VHIR10 Dropbox\Santi Perez-Hoyos\UEB-compartida\__FORMACIO\Formacio_externa\Pere_Virgili\Stata\datasets\resultados_ses2.txt
   log type:  text
- opened on:  16 Nov 2012, 13:47:17
+ opened on:  27 Nov 2023, 08:23:11
 
-. use "$DIR\sesion1.dta", replace
+. use "$DDIR\sesion1.dta", replace
 
 . 
 . 
@@ -23,244 +23,125 @@ Esta muerto |      Freq.     Percent        Cum.
 . 
 . 
 . * 3. Dibuja el histograma de la  transferrina previa, maxima y post
-. histogram transferrina_pre,   kdensity
+. histogram transferrina_pre,   kdensity normal
 (bin=8, start=79, width=37.5)
 
-. histogram  transferrina_tph ,   kdensity
+. histogram  transferrina_tph ,   kdensity normal
 (bin=11, start=61, width=25.909091)
 
-. histogram fer_max_tph,   kdensity
+. histogram fer_max_tph,   kdensity normal
 (bin=12, start=0, width=824)
 
 . 
 . 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-. 
-. mean transferrrina_pre transferrina_tph fer_max_tph, over(moret)
-variable transferrrina_pre not found
-r(111);
-
-end of do-file
-
-r(111);
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
 . 
 . 
-. 
+. * 4.- Calcula las medias de estas variables en  funcion de si acaban vivos o muertos
 . mean  transferrina_pre transferrina_tph fer_max_tph, over(mort)
 
-Mean estimation                     Number of obs    =      66
+Mean estimation                                        Number of obs = 66
 
-         Vivo: mort = Vivo
-       Muerto: mort = Muerto
-
---------------------------------------------------------------
-        Over |       Mean   Std. Err.     [95% Conf. Interval]
--------------+------------------------------------------------
-transferri~e |
-        Vivo |   208.3947   7.643417      193.1298    223.6597
-      Muerto |   189.2143    8.33085      172.5764    205.8521
--------------+------------------------------------------------
-transferri~h |
-        Vivo |   225.2895   8.980135      207.3549     243.224
-      Muerto |   170.6786   10.43182      149.8448    191.5124
--------------+------------------------------------------------
-fer_max_tph  |
-        Vivo |   1812.237   422.9231      967.6011    2656.873
-      Muerto |   2913.043   426.3457      2061.572    3764.514
---------------------------------------------------------------
+-------------------------------------------------------------------------
+                        |       Mean   Std. err.     [95% conf. interval]
+------------------------+------------------------------------------------
+c.transferrina_pre@mort |
+                  Vivo  |   208.3947   7.643417      193.1298    223.6597
+                Muerto  |   189.2143    8.33085      172.5764    205.8521
+                        |
+c.transferrina_tph@mort |
+                  Vivo  |   225.2895   8.980135      207.3549     243.224
+                Muerto  |   170.6786   10.43182      149.8448    191.5124
+                        |
+     c.fer_max_tph@mort |
+                  Vivo  |   1812.237   422.9231      967.6011    2656.873
+                Muerto  |   2913.043   426.3457      2061.572    3764.514
+-------------------------------------------------------------------------
 
 . 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
+. 
+. * 5.- Calcula los percentiles 25, 50 y 75 de estas variables
 . 
 . tabstat transferrina_pre transferrina_tph fer_max_tph, statistics(median p25 p75) 
 
-   stats |  tr~a_pre  tr~a_tph  fer_ma~h
+   Stats |  tr~a_pre  tr~a_tph  fer_ma~h
 ---------+------------------------------
      p50 |       190       194      1200
      p25 |       169       160       558
      p75 |       218       236      2564
 ----------------------------------------
-
-. 
-end of do-file
-
-. help tabstat
-
-. tabstat transferrina_pre transferrina_tph fer_max_tph, statistics(median p25 p75)  longstub
-
-   stats |  tr~a_pre  tr~a_tph  fer_ma~h
----------+------------------------------
-     p50 |       190       194      1200
-     p25 |       169       160       558
-     p75 |       218       236      2564
-----------------------------------------
-
-. tabstat transferrina_pre transferrina_tph fer_max_tph, statistics(median p25 p75)  columns(statistics)
-
-    variable |       p50       p25       p75
--------------+------------------------------
-transferri~e |       190       169       218
-transferri~h |       194       160       236
- fer_max_tph |      1200       558      2564
---------------------------------------------
-
-. help centile
 
 . centile transferrina_pre transferrina_tph fer_max_tph, centile(25 50 75 )
 
-                                                       -- Binom. Interp. --
-    Variable |     Obs  Percentile      Centile        [95% Conf. Interval]
+                                                          Binom. interp.   
+    Variable |       Obs  Percentile    Centile        [95% conf. interval]
 -------------+-------------------------------------------------------------
-transferri~e |      79         25           169        151.9181    178.9992
-             |                 50           190             182    204.7298
-             |                 75           218        206.0008    238.0819
-transferri~h |     125         25           160        149.4179    170.4989
-             |                 50           194        186.0545    205.9455
-             |                 75         236.5        225.0022    250.5274
- fer_max_tph |     145         25           550        349.5481    726.2118
-             |                 50          1200        1031.498    1532.315
-             |                 75        2731.5        2063.035    3997.796
-
-. kdensity  transferrina_pre transferrina_tph fer_max_tph
-too many variables specified
-r(103);
-
-. graph box  transferrina_pre transferrina_tph fer_max_tph
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+transferri~e |        79         25      169.00          151.92      179.00
+             |                   50      190.00          182.00      204.73
+             |                   75      218.00          206.00      238.08
+transferri~h |       125         25      160.00          149.42      170.50
+             |                   50      194.00          186.05      205.95
+             |                   75      236.50          225.00      250.53
+ fer_max_tph |       145         25      550.00          349.55      726.21
+             |                   50     1200.00         1031.50     1532.32
+             |                   75     2731.50         2063.03     3997.80
 
 . 
-. ci transferrina_pre transferrina_tph fer_max_tph
+. * 6.- Compara gràficamente las tres variables
+. 
+. graph box  transferrina_pre transferrina_tph fer_max_tph
 
-    Variable |        Obs        Mean    Std. Err.       [95% Conf. Interval]
+. 
+. 
+. * 7. Calcula el intervalo de confianza de la media de estas variables y del porcentaje de muertes
+. 
+. ci means transferrina_pre transferrina_tph fer_max_tph
+
+    Variable |        Obs        Mean    Std. err.       [95% conf. interval]
 -------------+---------------------------------------------------------------
-transferri~e |         79    196.3544    5.215606         185.971    206.7379
-transferri~h |        125    198.3008    5.145725         188.116    208.4856
- fer_max_tph |        145    2060.488    186.9188        1691.029    2429.947
+transferri~e |         79      196.35        5.22          185.97      206.74
+transferri~h |        125      198.30        5.15          188.12      208.49
+ fer_max_tph |        145     2060.49      186.92         1691.03     2429.95
 
-. ci mort, binomial
+. ci proportion mort
 
-                                                         -- Binomial Exact --
-    Variable |        Obs        Mean    Std. Err.       [95% Conf. Interval]
+                                                            Binomial exact   
+    Variable |        Obs  Proportion    Std. err.       [95% conf. interval]
 -------------+---------------------------------------------------------------
         mort |        145    .4137931    .0409009        .3327015    .4984811
 
 . 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
+. * 8.- Compara el histograma de la trasferrina previa  y màxima en función si el sujeto acaba muerto o no
 . 
 . histogram transferrina_pre,   kdensity normal by(mort)
 
 . histogram fer_max_tph,   kdensity normal by(mort)
 
 . 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-.  graph box  transferrina_pre ,over(mort)
-
-.  graph box transferrina_tph  ,over(mort)
-
-.  graph box fer_max_tph ,over(mort)
-
-. 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-.  graph box  transferrina_pre transferrina_tph,over(mort)
-
-. 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-.  
-. pnorm   transferrina_pre transferrina_tph fer_max_tph
-too many variables specified
-r(103);
-
-end of do-file
-
-r(103);
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-.  
-. pnorm   transferrina_pre
-
-. pnorm  transferrina_tph
-
-. pnorm  fer_max_tph
-
-. 
-end of do-file
-
-.  o "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-unrecognized command:  o
-r(199);
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-. ir mort tseg 
-too few variables specified
-r(102);
-
-end of do-file
-
-r(102);
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-. 
-. tabstat transferrina_pre transferrina_tph fer_max_tph, statistics(median p25 p75) 
-
-   stats |  tr~a_pre  tr~a_tph  fer_ma~h
----------+------------------------------
-     p50 |       190       194      1200
-     p25 |       169       160       558
-     p75 |       218       236      2564
-----------------------------------------
-
-. 
-end of do-file
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
+. * 9 .- Compara el diagrama de cajas la trasferrina previa  y post en función si el sujeto acaba muerto o no.
+. *  Dibuja el diagrama de cajas del la transferrina màxima en fucnión de si estan o no muertos
 .  
 .  graph box  transferrina_pre transferrina_tph  ,over(mort)
 
 . 
-end of do-file
+.  graph box fer_max_tph ,over(mort)
 
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
+.  
+. * 10. Mira visualmente la normalidad de las variables
+.  
+. pnorm   transferrina_pre , title( PPplot transferrina_pre)
 
-. twoway kdensity transferrina_pre if mort==0 || kdensity transferrina_pre if mort==1 ||,legend(label( 1 Vivos) label(2 Muertos))
+. pnorm  transferrina_tph , title( PPplot transferrina_post)
 
-. 
-end of do-file
-
-.  o "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-unrecognized command:  o
-r(199);
-
-. do "C:\DOCUME~1\sperez\CONFIG~1\Temp\STD00000000.tmp"
-
-. * 1- Activa el directorio de trabajo en una variable global DDIR
-. 
-. global DDIR="H:\_copia_disc\E\Docencia\stata\hematologia\"
+. pnorm  fer_max_tph , title( PPplot transferrina_max)
 
 . 
-. capture log close
+. 
+. 
+. * 11. Cierra el fichero de resultados  y la sesión
+. 
+. log close
+      name:  <unnamed>
+       log:  e:\18949893d\Nuevo Equipo VHIR10 Dropbox\Santi Perez-Hoyos\UEB-compartida\__FORMACIO\Formacio_externa\Pere_Virgili\Stata\datasets\resultados_ses2.txt
+  log type:  text
+ closed on:  27 Nov 2023, 08:23:29
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

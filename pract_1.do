@@ -1,15 +1,16 @@
-
+* Ejercicio Práctico 1
 
 * 1- Activa el directorio de trabajo en una variable global DDIR
 
-global DDIR="H:\_copia_disc\E\Docencia\stata\hematologia\"
+global DDIR="e:\18949893d\Nuevo Equipo VHIR10 Dropbox\Santi Perez-Hoyos\UEB-compartida\__FORMACIO\Formacio_externa\Pere_Virgili\Stata\datasets"
 
 * 2.- Activa el fichero para guardar los resultados en el directorio de trabajo “resultados_ses1.txt”
 capture log close
 log using "$DDIR\resultados_ses1.txt" , text replace
 
-*  3.- Importa la tabla de EXCEL “base_ferritina_usal” (el nombre de la tabla es el mismo que  la hoja
-odbc load , dsn("Excel Files;DBQ= $DDIR\base_ferritina_usal.xls") table("base_ferritina_usal$") clear lower  datestring
+*  3.- Importa la tabla de EXCEL “base_ferritina_usal” 
+
+ import excel "$DDIR\base_ferritina_usal.xls", sheet("Sheet1")  firstrow clear case(lower)
 
 
 * 4.- Describe y mira las variables de la tabla
@@ -20,21 +21,25 @@ browse
 drop iniciales quela_farmaco_post
 
 
+ *  Los datos se importan como fecha y no hace falta
 
-* 6. Genera las variables de fecha 
-gen data_tph= mdy(real( substr(tph_date,6,2)) ,real(substr(tph_date, 9,2)),real(substr(tph_date,1,4)))
+ * 6. Genera las variables de fecha 
+*gen data_tph= mdy(real( substr(tph_date,6,2)) ,real(substr(tph_date, 9,2)),real(substr(tph_date,1,4)))
+gen data_tph =tph_date
 format %td data_tph
 
-gen data_fer_max_tph= mdy(real( substr(fer_max_tph_date,6,2)) ,real(substr(fer_max_tph_date, 9,2)),real(substr(fer_max_tph_date,1,4)))
+*gen data_fer_max_tph= mdy(real( substr(fer_max_tph_date,6,2)) ,real(substr(fer_max_tph_date, 9,2)),real(substr(fer_max_tph_date,1,4)))
+gen data_fer_max_tph= fer_max_tph_date
 format %td data_fer_max_tph
 
-gen data_exitus= mdy(real( substr( exitus_date,6,2)) ,real(substr( exitus_date, 9,2)),real(substr( exitus_date,1,4)))
+*gen data_exitus= mdy(real( substr( exitus_date,6,2)) ,real(substr( exitus_date, 9,2)),real(substr( exitus_date,1,4)))
+gen data_exitus =exitus_date
 format %td data_exitus
-
+*/
 * 7.- Genera una variable que indique si el paciente ha muerto o no. Etiqueta la variable y los valores  vivo y muerto
 
 gen mort=0
-replace mort=1 if exitus_date!=""
+replace mort=1 if exitus_date!=.
 
 label var mort"Esta muerto"
 label define lab_mort 0"Vivo" 1"Muerto", modify
@@ -77,7 +82,7 @@ use  "$DDIR\vivos.dta", clear
 
 append using  "$DDIR\muertos.dta"
 
-save "$DIR\sesion1.dta", replace
+save "$DDIR\sesion1.dta", replace
 * 12 . Cierra el fichero de resultados  y la sesion
 log close
 exit

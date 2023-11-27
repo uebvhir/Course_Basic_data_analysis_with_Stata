@@ -2,11 +2,11 @@
 
 * 1- Activa el directorio de trabajo en una variable global DDIR
 
-global DDIR="H:\_copia_disc\E\Docencia\stata\hematologia\"
+global DDIR="e:\18949893d\Nuevo Equipo VHIR10 Dropbox\Santi Perez-Hoyos\UEB-compartida\__FORMACIO\Formacio_externa\Pere_Virgili\Stata\datasets"
 
 capture log close
 log using "$DDIR\resultados_ses2.txt" , text replace
-use "$DIR\sesion1.dta", replace
+use "$DDIR\sesion1.dta", replace
 
 
 * 2.- Calcula el número de muertos . Dibuja el gràfico adecuado.
@@ -38,13 +38,13 @@ graph box  transferrina_pre transferrina_tph fer_max_tph
 
 * 7. Calcula el intervalo de confianza de la media de estas variables y del porcentaje de muertes
 
-ci transferrina_pre transferrina_tph fer_max_tph
-ci mort, binomial
+ci means transferrina_pre transferrina_tph fer_max_tph
+ci proportion mort
 
 * 8.- Compara el histograma de la trasferrina previa  y màxima en función si el sujeto acaba muerto o no
 
 histogram transferrina_pre,   kdensity normal by(mort)
-histogram fer_max_tph,   kdensity normal by(mort)*
+histogram fer_max_tph,   kdensity normal by(mort)
 
 * 9 .- Compara el diagrama de cajas la trasferrina previa  y post en función si el sujeto acaba muerto o no.
 *  Dibuja el diagrama de cajas del la transferrina màxima en fucnión de si estan o no muertos
